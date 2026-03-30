@@ -1,0 +1,346 @@
+export type Language = 'en' | 'ru' | 'uz';
+
+export const translations = {
+  en: {
+    nav: {
+      jobs: 'Jobs',
+      courses: 'Courses',
+      universities: 'Universities',
+      careers: 'Careers',
+      admin: 'Admin',
+      dashboard: 'Dashboard'
+    },
+    home: {
+      heroTitle: 'Find Jobs, Choose Your Career Path, and Start Earning',
+      heroSubtitle: 'The all-in-one platform connecting education, career guidance, and top-tier job opportunities.',
+      searchPlaceholder: 'Job title or keyword',
+      locationPlaceholder: 'Location',
+      searchButton: 'Search Jobs',
+      latestJobs: 'Latest Jobs',
+      popularCareers: 'Popular Careers',
+      recommendedCourses: 'Recommended Courses',
+      viewAll: 'View all',
+      beginnerJobs: 'Jobs for Beginners',
+      militaryJobs: 'Military to Civilian',
+      beginnerDesc: 'Start your career journey with entry-level positions.',
+      militaryDesc: 'Specialized resources for those returning from military service.'
+    },
+    jobs: {
+      title: 'Find Your Next Opportunity',
+      searchPlaceholder: 'Search job titles, companies...',
+      locationPlaceholder: 'Location',
+      filters: 'Filters',
+      reset: 'Reset',
+      experience: 'Experience',
+      allLevels: 'All Levels',
+      entry: 'Entry-level',
+      mid: 'Mid-level',
+      senior: 'Senior',
+      specialCategories: 'Special Categories',
+      beginnerFriendly: 'Beginner Friendly',
+      militaryReturnees: 'Military Returnees',
+      showing: 'Showing',
+      noJobs: 'No jobs found',
+      viewDetails: 'View Details'
+    },
+    jobDetail: {
+      back: 'Back to jobs',
+      location: 'Location',
+      salary: 'Salary',
+      experience: 'Experience',
+      description: 'Description',
+      requirements: 'Requirements',
+      apply: 'Apply for this Position',
+      save: 'Save Job',
+      applyTitle: 'Apply for Job',
+      fullName: 'Full Name',
+      phone: 'Phone Number',
+      message: 'Message (Optional)',
+      uploadCV: 'Upload CV (Optional)',
+      submit: 'Submit Application',
+      success: 'Application Sent!',
+      successDesc: "We've received your application and will be in touch soon."
+    },
+    courses: {
+      title: 'Upskill Your Career',
+      subtitle: 'Learn from industry experts and get the skills you need to land your next job.',
+      duration: 'Duration',
+      outcome: 'Outcome',
+      enroll: 'Enroll Now'
+    },
+    universities: {
+      title: 'Top Universities & Majors',
+      subtitle: 'Choose the right academic path to reach your career goals.',
+      salaryExpectations: 'Avg. Graduate Salary',
+      majors: 'Popular Majors',
+      outcomes: 'Career Outcomes',
+      viewPrograms: 'View Programs'
+    },
+    careers: {
+      title: 'Career Paths & Guidance',
+      subtitle: 'Understand the journey from education to a high-paying job.',
+      learningPath: 'Recommended Learning Path',
+      topCourses: 'Top Related Courses',
+      recommendedUnis: 'Recommended Universities',
+      activeJobs: 'Active Job Openings'
+    },
+    ai: {
+      title: 'Career Assistant',
+      placeholder: 'Ask me anything about your career...',
+      welcome: 'Hello! I am your AI Career Assistant. How can I help you today?',
+      thinking: 'Thinking...'
+    },
+    dashboard: {
+      title: 'Personal Dashboard',
+      welcome: 'Welcome back,',
+      seeker: 'Job Seeker',
+      student: 'Student',
+      recruiter: 'Recruiter',
+      appliedJobs: 'Applied Jobs',
+      savedCourses: 'Saved Courses',
+      notifications: 'Notifications',
+      overview: 'Overview',
+      applications: 'Applications',
+      interviews: 'Interviews',
+      courseProgress: 'Course Progress',
+      recentActivity: 'Recent Activity',
+      viewAll: 'View All',
+      recommended: 'Recommended'
+    },
+    common: {
+      all: 'All',
+      loading: 'Loading...',
+      noResults: 'No results found',
+      learnMore: 'Learn More',
+      selectLanguage: 'Select Language'
+    }
+  },
+  ru: {
+    nav: {
+      jobs: 'Вакансии',
+      courses: 'Курсы',
+      universities: 'Университеты',
+      careers: 'Карьера',
+      admin: 'Админ',
+      dashboard: 'Панель'
+    },
+    home: {
+      heroTitle: 'Найдите работу, выберите свой путь и начните зарабатывать',
+      heroSubtitle: 'Универсальная платформа, объединяющая образование, профориентацию и лучшие вакансии.',
+      searchPlaceholder: 'Название работы или ключевое слово',
+      locationPlaceholder: 'Местоположение',
+      searchButton: 'Найти работу',
+      latestJobs: 'Последние вакансии',
+      popularCareers: 'Популярные карьеры',
+      recommendedCourses: 'Рекомендуемые курсы',
+      viewAll: 'Посмотреть все',
+      beginnerJobs: 'Работа для начинающих',
+      militaryJobs: 'Из армии в гражданку',
+      beginnerDesc: 'Начните свой карьерный путь с позиций начального уровня.',
+      militaryDesc: 'Специализированные ресурсы для вернувшихся с военной службы.'
+    },
+    jobs: {
+      title: 'Найдите свою следующую возможность',
+      searchPlaceholder: 'Поиск по названию, компании...',
+      locationPlaceholder: 'Местоположение',
+      filters: 'Фильтры',
+      reset: 'Сбросить',
+      experience: 'Опыт',
+      allLevels: 'Все уровни',
+      entry: 'Начальный уровень',
+      mid: 'Средний уровень',
+      senior: 'Старший уровень',
+      specialCategories: 'Специальные категории',
+      beginnerFriendly: 'Для начинающих',
+      militaryReturnees: 'Для ветеранов',
+      showing: 'Показано',
+      noJobs: 'Вакансии не найдены',
+      viewDetails: 'Подробнее'
+    },
+    jobDetail: {
+      back: 'Назад к вакансиям',
+      location: 'Местоположение',
+      salary: 'Зарплата',
+      experience: 'Опыт',
+      description: 'Описание',
+      requirements: 'Требования',
+      apply: 'Подать заявку',
+      save: 'Сохранить',
+      applyTitle: 'Подача заявки',
+      fullName: 'Полное имя',
+      phone: 'Номер телефона',
+      message: 'Сообщение (необязательно)',
+      uploadCV: 'Загрузить резюме (необязательно)',
+      submit: 'Отправить заявку',
+      success: 'Заявка отправлена!',
+      successDesc: 'Мы получили вашу заявку и скоро свяжемся с вами.'
+    },
+    courses: {
+      title: 'Повысьте свою квалификацию',
+      subtitle: 'Учитесь у экспертов отрасли и получайте навыки, необходимые для новой работы.',
+      duration: 'Длительность',
+      outcome: 'Результат',
+      enroll: 'Записаться'
+    },
+    universities: {
+      title: 'Лучшие университеты и специальности',
+      subtitle: 'Выберите правильный академический путь для достижения ваших целей.',
+      salaryExpectations: 'Средняя зарплата выпускника',
+      majors: 'Популярные специальности',
+      outcomes: 'Карьерные перспективы',
+      viewPrograms: 'Программы обучения'
+    },
+    careers: {
+      title: 'Карьерные пути и руководство',
+      subtitle: 'Поймите путь от образования до высокооплачиваемой работы.',
+      learningPath: 'Рекомендуемый путь обучения',
+      topCourses: 'Лучшие связанные курсы',
+      recommendedUnis: 'Рекомендуемые университеты',
+      activeJobs: 'Активные вакансии'
+    },
+    ai: {
+      title: 'Карьерный помощник',
+      placeholder: 'Спросите меня о чем угодно...',
+      welcome: 'Привет! Я ваш ИИ-помощник по карьере. Чем я могу вам помочь сегодня?',
+      thinking: 'Думаю...'
+    },
+    dashboard: {
+      title: 'Личный кабинет',
+      welcome: 'С возвращением,',
+      seeker: 'Соискатель',
+      student: 'Студент',
+      recruiter: 'Рекрутер',
+      appliedJobs: 'Поданные заявки',
+      savedCourses: 'Сохраненные курсы',
+      notifications: 'Уведомления',
+      overview: 'Обзор',
+      applications: 'Заявки',
+      interviews: 'Интервью',
+      courseProgress: 'Прогресс курсов',
+      recentActivity: 'Последние действия',
+      viewAll: 'Посмотреть все',
+      recommended: 'Рекомендуемое'
+    },
+    common: {
+      all: 'Все',
+      loading: 'Загрузка...',
+      noResults: 'Ничего не найдено',
+      learnMore: 'Подробнее',
+      selectLanguage: 'Выберите язык'
+    }
+  },
+  uz: {
+    nav: {
+      jobs: 'Ishlar',
+      courses: 'Kurslar',
+      universities: 'Universitetlar',
+      careers: 'Karyera',
+      admin: 'Admin',
+      dashboard: 'Panel'
+    },
+    home: {
+      heroTitle: "Ish toping, karyera yo'lingizni tanlang va daromad olishni boshlang",
+      heroSubtitle: "Ta'lim, karyera bo'yicha maslahatlar va eng yaxshi ish imkoniyatlarini birlashtirgan platforma.",
+      searchPlaceholder: 'Ish nomi yoki kalit so‘z',
+      locationPlaceholder: 'Manzil',
+      searchButton: 'Ish qidirish',
+      latestJobs: 'So‘nggi ishlar',
+      popularCareers: 'Mashhur karyeralar',
+      recommendedCourses: 'Tavsiya etilgan kurslar',
+      viewAll: 'Hammasini ko‘rish',
+      beginnerJobs: 'Boshlovchilar uchun ishlar',
+      militaryJobs: 'Harbiydan fuqarolikka',
+      beginnerDesc: 'Karyerangizni boshlang‘ich darajadagi lavozimlardan boshlang.',
+      militaryDesc: 'Harbiy xizmatdan qaytganlar uchun maxsus resurslar.'
+    },
+    jobs: {
+      title: 'Keyingi imkoniyatingizni toping',
+      searchPlaceholder: 'Ish nomi, kompaniya bo‘yicha qidirish...',
+      locationPlaceholder: 'Manzil',
+      filters: 'Filtrlar',
+      reset: 'Tiklash',
+      experience: 'Tajriba',
+      allLevels: 'Barcha darajalar',
+      entry: 'Boshlang‘ich daraja',
+      mid: 'O‘rta daraja',
+      senior: 'Yuqori daraja',
+      specialCategories: 'Maxsus toifalar',
+      beginnerFriendly: 'Boshlovchilar uchun',
+      militaryReturnees: 'Harbiylar uchun',
+      showing: 'Ko‘rsatilmoqda',
+      noJobs: 'Ishlar topilmadi',
+      viewDetails: 'Batafsil'
+    },
+    jobDetail: {
+      back: 'Ishlarga qaytish',
+      location: 'Manzil',
+      salary: 'Maosh',
+      experience: 'Tajriba',
+      description: 'Tavsif',
+      requirements: 'Talablar',
+      apply: 'Ariza topshirish',
+      save: 'Saqlash',
+      applyTitle: 'Ishga ariza topshirish',
+      fullName: 'To‘liq ism',
+      phone: 'Telefon raqami',
+      message: 'Xabar (ixtiyoriy)',
+      uploadCV: 'Rezyume yuklash (ixtiyoriy)',
+      submit: 'Arizani yuborish',
+      success: 'Ariza yuborildi!',
+      successDesc: 'Biz sizning arizangizni qabul qildik va tez orada bog‘lanamiz.'
+    },
+    courses: {
+      title: 'Malakangizni oshiring',
+      subtitle: 'Soha mutaxassislaridan o‘rganing va yangi ish uchun zarur ko‘nikmalarga ega bo‘ling.',
+      duration: 'Davomiyligi',
+      outcome: 'Natija',
+      enroll: 'Ro‘yxatdan o‘tish'
+    },
+    universities: {
+      title: 'Eng yaxshi universitetlar va yo‘nalishlar',
+      subtitle: 'Karyera maqsadlaringizga erishish uchun to‘g‘ri akademik yo‘lni tanlang.',
+      salaryExpectations: 'Bitiruvchining o‘rtacha maoshi',
+      majors: 'Mashhur yo‘nalishlar',
+      outcomes: 'Karyera istiqbollari',
+      viewPrograms: 'O‘quv dasturlari'
+    },
+    careers: {
+      title: 'Karyera yo‘llari va yo‘riqnomalar',
+      subtitle: 'Ta’limdan yuqori maoshli ishgacha bo‘lgan yo‘lni tushunib oling.',
+      learningPath: 'Tavsiya etilgan o‘quv yo‘li',
+      topCourses: 'Tegishli eng yaxshi kurslar',
+      recommendedUnis: 'Tavsiya etilgan universitetlar',
+      activeJobs: 'Faol ish o‘rinlari'
+    },
+    ai: {
+      title: 'Karyera yordamchisi',
+      placeholder: 'Karyerangiz haqida xohlagan narsangizni so‘rang...',
+      welcome: 'Salom! Men sizning sun’iy intellektli karyera yordamchingizman. Bugun sizga qanday yordam bera olaman?',
+      thinking: 'O‘ylayapman...'
+    },
+    dashboard: {
+      title: 'Shaxsiy kabinet',
+      welcome: 'Xush kelibsiz,',
+      seeker: 'Ish qidiruvchi',
+      student: 'Talaba',
+      recruiter: 'Rekruter',
+      appliedJobs: 'Topshirilgan arizalar',
+      savedCourses: 'Saqlangan kurslar',
+      notifications: 'Bildirishnomalar',
+      overview: 'Umumiy ko‘rinish',
+      applications: 'Arizalar',
+      interviews: 'Suhbatlar',
+      courseProgress: 'Kurslar jarayoni',
+      recentActivity: 'So‘nggi harakatlar',
+      viewAll: 'Hammasini ko‘rish',
+      recommended: 'Tavsiya etilgan'
+    },
+    common: {
+      all: 'Hammasi',
+      loading: 'Yuklanmoqda...',
+      noResults: 'Natija topilmadi',
+      learnMore: 'Batafsil',
+      selectLanguage: 'Tilni tanlang'
+    }
+  }
+};
