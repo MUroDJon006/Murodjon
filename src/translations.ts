@@ -113,6 +113,29 @@ export const translations = {
       noResults: 'No results found',
       learnMore: 'Learn More',
       selectLanguage: 'Select Language'
+    },
+    auth: {
+      loginTitle: 'Welcome Back',
+      signupTitle: 'Create Account',
+      phoneLabel: 'Phone Number',
+      passwordLabel: 'Password',
+      confirmPassword: 'Confirm Password',
+      forgotPassword: 'Forgot Password?',
+      loginButton: 'Sign In',
+      signupButton: 'Sign Up',
+      noAccount: "Don't have an account?",
+      hasAccount: 'Already have an account?',
+      otpTitle: 'Verify Phone',
+      otpSubtitle: 'Enter the 6-digit code sent to',
+      verifyButton: 'Verify & Continue',
+      resendOtp: 'Resend Code',
+      recoveryTitle: 'Recover Password',
+      recoverySubtitle: 'Enter your phone number to reset your password',
+      sendCode: 'Send Recovery Code',
+      countrySelect: 'Select Country',
+      errorInvalidPhone: 'Please enter a valid phone number',
+      errorInvalidOtp: 'Invalid verification code',
+      errorPasswordMismatch: 'Passwords do not match'
     }
   },
   ru: {
@@ -227,6 +250,29 @@ export const translations = {
       noResults: 'Ничего не найдено',
       learnMore: 'Подробнее',
       selectLanguage: 'Выберите язык'
+    },
+    auth: {
+      loginTitle: 'С возвращением',
+      signupTitle: 'Создать аккаунт',
+      phoneLabel: 'Номер телефона',
+      passwordLabel: 'Пароль',
+      confirmPassword: 'Подтвердите пароль',
+      forgotPassword: 'Забыли пароль?',
+      loginButton: 'Войти',
+      signupButton: 'Регистрация',
+      noAccount: 'Нет аккаунта?',
+      hasAccount: 'Уже есть аккаунт?',
+      otpTitle: 'Подтверждение телефона',
+      otpSubtitle: 'Введите 6-значный код, отправленный на',
+      verifyButton: 'Подтвердить и продолжить',
+      resendOtp: 'Отправить код повторно',
+      recoveryTitle: 'Восстановление пароля',
+      recoverySubtitle: 'Введите номер телефона для сброса пароля',
+      sendCode: 'Отправить код восстановления',
+      countrySelect: 'Выберите страну',
+      errorInvalidPhone: 'Введите корректный номер телефона',
+      errorInvalidOtp: 'Неверный код подтверждения',
+      errorPasswordMismatch: 'Пароли не совпадают'
     }
   },
   uz: {
@@ -341,6 +387,29 @@ export const translations = {
       noResults: 'Natija topilmadi',
       learnMore: 'Batafsil',
       selectLanguage: 'Tilni tanlang'
+    },
+    auth: {
+      loginTitle: 'Xush kelibsiz',
+      signupTitle: 'Hisob yaratish',
+      phoneLabel: 'Telefon raqami',
+      passwordLabel: 'Parol',
+      confirmPassword: 'Parolni tasdiqlang',
+      forgotPassword: 'Parolni unutdingizmi?',
+      loginButton: 'Kirish',
+      signupButton: 'Ro‘yxatdan o‘tish',
+      noAccount: 'Hisobingiz yo‘qmi?',
+      hasAccount: 'Hisobingiz bormi?',
+      otpTitle: 'Telefonni tasdiqlash',
+      otpSubtitle: 'Yuborilgan 6 xonali kodni kiriting',
+      verifyButton: 'Tasdiqlash va davom etish',
+      resendOtp: 'Kodni qayta yuborish',
+      recoveryTitle: 'Parolni tiklash',
+      recoverySubtitle: 'Parolni tiklash uchun telefon raqamingizni kiriting',
+      sendCode: 'Tiklash kodini yuborish',
+      countrySelect: 'Davlatni tanlang',
+      errorInvalidPhone: 'Iltimos, to‘g‘ri telefon raqamini kiriting',
+      errorInvalidOtp: 'Tasdiqlash kodi noto‘g‘ri',
+      errorPasswordMismatch: 'Parollar mos kelmadi'
     }
   }
 };

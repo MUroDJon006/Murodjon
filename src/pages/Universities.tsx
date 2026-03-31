@@ -6,7 +6,7 @@ import { useLanguage } from '../LanguageContext';
 import { cn } from '../lib/utils';
 
 export default function Universities() {
-  const { t, language } = useLanguage();
+  const { t, language, formatCurrency } = useLanguage();
   const [universities, setUniversities] = useState<University[]>([]);
   const [filteredUniversities, setFilteredUniversities] = useState<University[]>([]);
   const [loading, setLoading] = useState(true);
@@ -50,6 +50,20 @@ export default function Universities() {
 
     setFilteredUniversities(result);
   }, [universities, searchQuery, locationFilter]);
+
+  // Helper to parse salary expectations string
+  const parseAndFormatSalary = (salary: string) => {
+    if (!salary) return salary;
+    if (salary.includes('UZS')) {
+      const num = parseInt(salary.replace(/[^0-9]/g, ''));
+      return isNaN(num) ? salary : formatCurrency(num);
+    }
+    if (salary.includes('$')) {
+      const num = parseInt(salary.replace(/[^0-9]/g, ''));
+      return isNaN(num) ? salary : formatCurrency(num);
+    }
+    return salary;
+  };
 
   return (
     <div className="bg-teal-50/30 dark:bg-gray-950 min-h-screen pb-20 transition-colors">
@@ -115,7 +129,7 @@ export default function Universities() {
                     </div>
                     <div className="bg-teal-50 dark:bg-teal-900/20 p-4 rounded-2xl text-center md:text-right">
                       <p className="text-[10px] font-black text-teal-600 dark:text-teal-400 uppercase tracking-[0.2em] mb-1">{t.universities.salaryExpectations}</p>
-                      <p className="text-2xl font-black text-teal-700 dark:text-teal-300">{uni.salaryExpectations}</p>
+                      <p className="text-2xl font-black text-teal-700 dark:text-teal-300">{parseAndFormatSalary(uni.salaryExpectations)}</p>
                     </div>
                   </div>
 
@@ -162,7 +176,9 @@ export default function Universities() {
             <div className="col-span-full bg-white dark:bg-gray-800 p-20 rounded-[3rem] border border-dashed border-gray-200 dark:border-gray-700 text-center">
               <Search className="w-16 h-16 text-gray-300 mx-auto mb-6" />
               <h3 className="text-2xl font-bold text-gray-900 dark:text-white">{t.common.noResults}</h3>
-              <p className="text-gray-500 dark:text-gray-400 mt-2">Try searching for a different name or faculty</p>
+              <p className="text-gray-500 dark:text-gray-400 mt-2">
+                {language === 'en' ? 'Try searching for a different name or faculty' : language === 'ru' ? 'Попробуйте поискать другое название или факультет' : 'Boshqa nom yoki fakultetni qidirib ko‘ring'}
+              </p>
             </div>
           )}
         </div>

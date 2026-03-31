@@ -1,3 +1,16 @@
+export type UserRole = 'user' | 'super_admin' | 'job_admin' | 'course_admin' | 'university_admin';
+
+export interface User {
+  id: string;
+  phone: string;
+  role: UserRole;
+  name?: string;
+  avatar?: string;
+  createdAt: string;
+}
+
+export type AuthStatus = 'loading' | 'authenticated' | 'unauthenticated';
+
 export interface Job {
   id: string;
   title: string;

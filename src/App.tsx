@@ -1,11 +1,16 @@
-import { BrowserRouter as Router, Routes, Route, Link, useLocation } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, Link, useLocation, useNavigate } from 'react-router-dom';
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
-import { Search, Briefcase, GraduationCap, School, User, Menu, X, ChevronRight, MapPin, DollarSign, Clock, Award, Globe, LayoutDashboard, Sun, Moon, PhoneCall } from 'lucide-react';
+import { 
+  Search, Briefcase, GraduationCap, School, User, Menu, X, ChevronRight, 
+  MapPin, DollarSign, Clock, Award, Globe, LayoutDashboard, Sun, Moon, 
+  PhoneCall, LogOut, Settings as SettingsIcon, Heart, BookOpen, FileText, ChevronDown 
+} from 'lucide-react';
 import { cn } from './lib/utils';
 import { Job, Course, University, Career } from './types';
 import { LanguageProvider, useLanguage } from './LanguageContext';
 import { ThemeProvider, useTheme } from './ThemeContext';
+import { AuthProvider, useAuth } from './context/AuthContext';
 import { Toaster, toast } from 'sonner';
 import AIAssistant from './components/AIAssistant';
 
@@ -16,15 +21,44 @@ import JobDetail from './pages/JobDetail';
 import Careers from './pages/Careers';
 import Courses from './pages/Courses';
 import Universities from './pages/Universities';
-import Admin from './pages/Admin';
+import AdminDashboard from './pages/AdminDashboard';
+import AdminContent from './pages/AdminContent';
 import Dashboard from './pages/Dashboard';
+import Settings from './pages/Settings';
+import Login from './pages/Login';
+
+const ProtectedRoute = ({ children, requireAdmin = false }: { children: React.ReactNode, requireAdmin?: boolean }) => {
+  const { status, user, isAdmin } = useAuth();
+  const location = useLocation();
+
+  if (status === 'loading') {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-white dark:bg-gray-950">
+        <div className="w-12 h-12 border-4 border-indigo-600 border-t-transparent rounded-full animate-spin" />
+      </div>
+    );
+  }
+
+  if (status === 'unauthenticated') {
+    return <Login />;
+  }
+
+  if (requireAdmin && !isAdmin) {
+    return <Home />;
+  }
+
+  return <>{children}</>;
+};
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [isLangOpen, setIsLangOpen] = useState(false);
+  const [isProfileOpen, setIsProfileOpen] = useState(false);
   const location = useLocation();
   const { t, setLanguage, language } = useLanguage();
   const { theme, toggleTheme } = useTheme();
+  const { user, logout, isAdmin, status } = useAuth();
+  const navigate = useNavigate();
 
   const navLinks = [
     { name: t.nav.jobs, path: '/jobs', icon: Briefcase, color: 'text-blue-600 dark:text-blue-400' },
@@ -33,11 +67,34 @@ const Navbar = () => {
     { name: t.nav.careers, path: '/careers', icon: Award, color: 'text-purple-600 dark:text-purple-400' },
   ];
 
+  const adminLinks = [
+    { name: 'Analytics', path: '/admin', icon: LayoutDashboard, color: 'text-indigo-600 dark:text-indigo-400' },
+    { name: 'CMS', path: '/admin/content', icon: LayoutDashboard, color: 'text-pink-600 dark:text-pink-400' },
+  ];
+
+  const userDropdownLinks = [
+    { name: t.nav.dashboard || 'Dashboard', path: isAdmin ? '/admin' : '/dashboard', icon: LayoutDashboard },
+    { name: 'Saved Jobs', path: '/saved-jobs', icon: Heart },
+    { name: 'My Courses', path: '/my-courses', icon: BookOpen },
+    { name: 'Applications', path: '/applications', icon: FileText },
+    { name: 'Settings', path: '/settings', icon: SettingsIcon },
+  ];
+
   const languages = [
     { code: 'en', name: 'English' },
     { code: 'ru', name: 'Русский' },
     { code: 'uz', name: 'O\'zbek' },
   ];
+
+  const handleLogout = () => {
+    logout();
+    navigate('/login');
+    toast.info("Logged out successfully");
+    setIsOpen(false);
+    setIsProfileOpen(false);
+  };
+
+  if (location.pathname === '/login') return null;
 
   return (
     <nav className="sticky top-0 z-50 bg-white/80 dark:bg-gray-900/80 backdrop-blur-md border-b border-gray-100 dark:border-gray-800 transition-colors">
@@ -50,13 +107,25 @@ const Navbar = () => {
 
           {/* Desktop Nav */}
           <div className="hidden md:flex items-center space-x-6">
-            {navLinks.map((link) => (
+            {!isAdmin ? navLinks.map((link) => (
               <Link
                 key={link.path}
                 to={link.path}
                 className={cn(
                   "flex items-center space-x-1 text-sm font-medium transition-colors hover:opacity-80",
                   location.pathname.startsWith(link.path) ? link.color : "text-gray-600 dark:text-gray-400"
+                )}
+              >
+                <link.icon className="w-4 h-4" />
+                <span>{link.name}</span>
+              </Link>
+            )) : adminLinks.map((link) => (
+              <Link
+                key={link.path}
+                to={link.path}
+                className={cn(
+                  "flex items-center space-x-1 text-sm font-medium transition-colors hover:opacity-80",
+                  location.pathname === link.path ? link.color : "text-gray-600 dark:text-gray-400"
                 )}
               >
                 <link.icon className="w-4 h-4" />
@@ -75,9 +144,70 @@ const Navbar = () => {
                 {theme === 'light' ? <Moon className="w-5 h-5" /> : <Sun className="w-5 h-5" />}
               </button>
 
-              <Link to="/dashboard" className="p-2 text-gray-400 hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors">
-                <LayoutDashboard className="w-5 h-5" />
-              </Link>
+              {status === 'authenticated' && user ? (
+                <div className="relative">
+                  <button 
+                    onClick={() => setIsProfileOpen(!isProfileOpen)}
+                    className="flex items-center space-x-3 pl-2 pr-1 py-1 rounded-full hover:bg-gray-100 dark:hover:bg-gray-800 transition-all border border-transparent hover:border-gray-200 dark:hover:border-gray-700"
+                  >
+                    <div className="text-right hidden lg:block">
+                      <p className="text-xs font-bold text-gray-900 dark:text-white leading-tight">{user.name || user.phone}</p>
+                      <p className="text-[10px] text-gray-500 dark:text-gray-400 uppercase tracking-tighter font-bold">
+                        {user.role.replace('_', ' ')}
+                      </p>
+                    </div>
+                    <div className="w-9 h-9 rounded-full bg-indigo-100 dark:bg-indigo-900/30 border-2 border-white dark:border-gray-800 overflow-hidden shadow-sm">
+                      <img src={user.avatar} alt={user.name} className="w-full h-full object-cover" />
+                    </div>
+                    <ChevronDown className={cn("w-4 h-4 text-gray-400 transition-transform", isProfileOpen && "rotate-180")} />
+                  </button>
+
+                  <AnimatePresence>
+                    {isProfileOpen && (
+                      <>
+                        <div className="fixed inset-0 z-0" onClick={() => setIsProfileOpen(false)} />
+                        <motion.div
+                          initial={{ opacity: 0, y: 10, scale: 0.95 }}
+                          animate={{ opacity: 1, y: 0, scale: 1 }}
+                          exit={{ opacity: 0, y: 10, scale: 0.95 }}
+                          className="absolute right-0 mt-2 w-56 bg-white dark:bg-gray-900 rounded-2xl shadow-2xl border border-gray-100 dark:border-gray-800 overflow-hidden z-10"
+                        >
+                          <div className="p-4 border-b border-gray-100 dark:border-gray-800 bg-gray-50/50 dark:bg-gray-800/50">
+                            <p className="text-sm font-bold text-gray-900 dark:text-white truncate">{user.name}</p>
+                            <p className="text-xs text-gray-500 dark:text-gray-400 truncate">{user.phone}</p>
+                          </div>
+                          <div className="p-2">
+                            {userDropdownLinks.map((link) => (
+                              <Link
+                                key={link.path}
+                                to={link.path}
+                                onClick={() => setIsProfileOpen(false)}
+                                className="flex items-center space-x-3 px-3 py-2.5 rounded-xl text-sm font-medium text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-800 hover:text-indigo-600 dark:hover:text-indigo-400 transition-all"
+                              >
+                                <link.icon className="w-4 h-4" />
+                                <span>{link.name}</span>
+                              </Link>
+                            ))}
+                          </div>
+                          <div className="p-2 border-t border-gray-100 dark:border-gray-800">
+                            <button
+                              onClick={handleLogout}
+                              className="w-full flex items-center space-x-3 px-3 py-2.5 rounded-xl text-sm font-bold text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/20 transition-all"
+                            >
+                              <LogOut className="w-4 h-4" />
+                              <span>Logout</span>
+                            </button>
+                          </div>
+                        </motion.div>
+                      </>
+                    )}
+                  </AnimatePresence>
+                </div>
+              ) : (
+                <Link to="/login" className="px-4 py-2 bg-indigo-600 text-white rounded-xl text-sm font-bold hover:bg-indigo-700 transition-all shadow-lg shadow-indigo-500/20">
+                  {t.auth.loginButton}
+                </Link>
+              )}
 
               {/* Language Switcher */}
               <div className="relative">
@@ -151,6 +281,18 @@ const Navbar = () => {
             className="md:hidden bg-white dark:bg-gray-900 border-b border-gray-100 dark:border-gray-800 overflow-hidden"
           >
             <div className="px-4 pt-2 pb-6 space-y-2">
+              {status === 'authenticated' && user && (
+                <div className="p-4 mb-4 bg-gray-50 dark:bg-gray-800 rounded-2xl flex items-center space-x-4">
+                  <div className="w-12 h-12 rounded-full bg-indigo-100 dark:bg-indigo-900/30 border-2 border-white dark:border-gray-700 overflow-hidden">
+                    <img src={user.avatar} alt={user.name} className="w-full h-full object-cover" />
+                  </div>
+                  <div>
+                    <p className="font-bold text-gray-900 dark:text-white">{user.name}</p>
+                    <p className="text-xs text-gray-500 dark:text-gray-400">{user.phone}</p>
+                  </div>
+                </div>
+              )}
+
               {navLinks.map((link) => (
                 <Link
                   key={link.path}
@@ -165,14 +307,39 @@ const Navbar = () => {
                   <span>{link.name}</span>
                 </Link>
               ))}
-              <Link
-                to="/dashboard"
-                onClick={() => setIsOpen(false)}
-                className="flex items-center space-x-3 p-3 rounded-lg text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-800"
-              >
-                <LayoutDashboard className="w-5 h-5" />
-                <span>{t.nav.dashboard}</span>
-              </Link>
+
+              {status === 'authenticated' ? (
+                <>
+                  <div className="h-px bg-gray-100 dark:bg-gray-800 my-2" />
+                  {userDropdownLinks.map((link) => (
+                    <Link
+                      key={link.path}
+                      to={link.path}
+                      onClick={() => setIsOpen(false)}
+                      className="flex items-center space-x-3 p-3 rounded-lg text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-800"
+                    >
+                      <link.icon className="w-5 h-5" />
+                      <span>{link.name}</span>
+                    </Link>
+                  ))}
+                  <button
+                    onClick={handleLogout}
+                    className="w-full flex items-center space-x-3 p-3 rounded-lg text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/20 font-bold"
+                  >
+                    <LogOut className="w-5 h-5" />
+                    <span>Logout</span>
+                  </button>
+                </>
+              ) : (
+                <Link
+                  to="/login"
+                  onClick={() => setIsOpen(false)}
+                  className="flex items-center space-x-3 p-3 rounded-lg bg-indigo-600 text-white font-bold"
+                >
+                  <User className="w-5 h-5" />
+                  <span>{t.auth.loginButton}</span>
+                </Link>
+              )}
             </div>
           </motion.div>
         )}
@@ -221,6 +388,10 @@ const Navbar = () => {
 
 const Footer = () => {
   const { t, language } = useLanguage();
+  const location = useLocation();
+
+  if (location.pathname === '/login') return null;
+
   return (
     <footer className="bg-gray-50 dark:bg-gray-950 border-t border-gray-200 dark:border-gray-800 py-12 transition-colors">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -276,29 +447,37 @@ const Footer = () => {
 
 export default function App() {
   return (
-    <ThemeProvider>
-      <LanguageProvider>
-        <Router>
-          <div className="min-h-screen bg-white dark:bg-gray-950 text-gray-900 dark:text-gray-100 flex flex-col transition-colors">
-            <Toaster position="top-right" richColors />
-            <Navbar />
-            <main className="flex-grow">
-              <Routes>
-                <Route path="/" element={<Home />} />
-                <Route path="/jobs" element={<Jobs />} />
-                <Route path="/jobs/:id" element={<JobDetail />} />
-                <Route path="/careers" element={<Careers />} />
-                <Route path="/courses" element={<Courses />} />
-                <Route path="/universities" element={<Universities />} />
-                <Route path="/admin" element={<Admin />} />
-                <Route path="/dashboard" element={<Dashboard />} />
-              </Routes>
-            </main>
-            <AIAssistant />
-            <Footer />
-          </div>
-        </Router>
-      </LanguageProvider>
-    </ThemeProvider>
+    <AuthProvider>
+      <ThemeProvider>
+        <LanguageProvider>
+          <Router>
+            <div className="min-h-screen bg-white dark:bg-gray-950 text-gray-900 dark:text-gray-100 flex flex-col transition-colors">
+              <Toaster position="top-right" richColors />
+              <Navbar />
+              <main className="flex-grow">
+                <Routes>
+                  <Route path="/" element={<ProtectedRoute><Home /></ProtectedRoute>} />
+                  <Route path="/jobs" element={<ProtectedRoute><Jobs /></ProtectedRoute>} />
+                  <Route path="/jobs/:id" element={<ProtectedRoute><JobDetail /></ProtectedRoute>} />
+                  <Route path="/careers" element={<ProtectedRoute><Careers /></ProtectedRoute>} />
+                  <Route path="/courses" element={<ProtectedRoute><Courses /></ProtectedRoute>} />
+                  <Route path="/universities" element={<ProtectedRoute><Universities /></ProtectedRoute>} />
+                  <Route path="/admin" element={<ProtectedRoute requireAdmin><AdminDashboard /></ProtectedRoute>} />
+                  <Route path="/admin/content" element={<ProtectedRoute requireAdmin><AdminContent /></ProtectedRoute>} />
+                  <Route path="/dashboard" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
+                  <Route path="/settings" element={<ProtectedRoute><Settings /></ProtectedRoute>} />
+                  <Route path="/saved-jobs" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
+                  <Route path="/my-courses" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
+                  <Route path="/applications" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
+                  <Route path="/login" element={<Login />} />
+                </Routes>
+              </main>
+              <AIAssistant />
+              <Footer />
+            </div>
+          </Router>
+        </LanguageProvider>
+      </ThemeProvider>
+    </AuthProvider>
   );
 }

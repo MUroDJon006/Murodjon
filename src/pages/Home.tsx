@@ -9,7 +9,7 @@ import { cn } from '../lib/utils';
 type SectionType = 'jobs' | 'courses' | 'universities';
 
 export default function Home() {
-  const { t, language } = useLanguage();
+  const { t, language, formatCurrency, formatNumber } = useLanguage();
   const [activeSection, setActiveSection] = useState<SectionType>('jobs');
   const [jobs, setJobs] = useState<Job[]>([]);
   const [courses, setCourses] = useState<Course[]>([]);
@@ -30,6 +30,21 @@ export default function Home() {
     { id: 'courses' as SectionType, label: t.nav.courses, icon: GraduationCap, color: 'from-purple-600 to-pink-600', lightColor: 'bg-purple-50 dark:bg-purple-900/20', textColor: 'text-purple-600 dark:text-purple-400' },
     { id: 'universities' as SectionType, label: t.nav.universities, icon: School, color: 'from-teal-600 to-emerald-600', lightColor: 'bg-teal-50 dark:bg-teal-900/20', textColor: 'text-teal-600 dark:text-teal-400' },
   ];
+
+  // Helper to parse salary string like "$50k - $80k" or "5,000,000 UZS"
+  const parseAndFormatSalary = (salary: string) => {
+    if (!salary) return salary;
+    // Simple heuristic for demo: if it contains UZS, it's Uzbek currency
+    if (salary.includes('UZS')) {
+      const num = parseInt(salary.replace(/[^0-9]/g, ''));
+      return isNaN(num) ? salary : formatCurrency(num);
+    }
+    if (salary.includes('$')) {
+      const num = parseInt(salary.replace(/[^0-9]/g, '')) * 1000; // Assuming 'k'
+      return isNaN(num) ? salary : formatCurrency(num);
+    }
+    return salary;
+  };
 
   return (
     <div className="space-y-20 pb-20 transition-colors">
@@ -186,7 +201,7 @@ export default function Home() {
                     <MapPin className="w-4 h-4 mr-2" /> {job.location}
                   </div>
                   <div className="flex items-center justify-between pt-6 border-t border-gray-50 dark:border-gray-700">
-                    <span className="font-black text-gray-900 dark:text-white text-lg">{job.salary}</span>
+                    <span className="font-black text-gray-900 dark:text-white text-lg">{parseAndFormatSalary(job.salary)}</span>
                     <span className="text-sm font-medium text-gray-400 dark:text-gray-500">{job.experience}</span>
                   </div>
                 </Link>
@@ -197,7 +212,7 @@ export default function Home() {
                   <div className="h-48 bg-purple-50 dark:bg-purple-900/30 flex items-center justify-center relative">
                     <GraduationCap className="w-20 h-20 text-purple-600 dark:text-purple-400" />
                     <div className="absolute top-4 right-4 bg-white dark:bg-gray-800 px-3 py-1 rounded-full text-xs font-bold text-purple-600 dark:text-purple-400 shadow-sm">
-                      {course.price}
+                      {course.price === 'Free' ? (language === 'en' ? 'Free' : language === 'ru' ? 'Бесплатно' : 'Bepul') : parseAndFormatSalary(course.price)}
                     </div>
                   </div>
                   <div className="p-8 flex-1 flex flex-col">
@@ -206,7 +221,7 @@ export default function Home() {
                     <div className="mt-auto pt-6 border-t border-gray-50 dark:border-gray-700 flex items-center justify-between">
                       <div className="flex items-center text-xs font-bold text-gray-400 dark:text-gray-500 space-x-4">
                         <span className="flex items-center"><Clock className="w-4 h-4 mr-1.5" /> {course.duration}</span>
-                        <span className="flex items-center"><Users className="w-4 h-4 mr-1.5" /> 1.2k</span>
+                        <span className="flex items-center"><Users className="w-4 h-4 mr-1.5" /> {formatNumber(1200)}</span>
                       </div>
                       <button className="p-2 bg-purple-600 text-white rounded-xl hover:bg-purple-700 transition-colors">
                         <ArrowRight className="w-5 h-5" />

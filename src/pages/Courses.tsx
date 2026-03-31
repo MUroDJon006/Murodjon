@@ -6,7 +6,7 @@ import { useLanguage } from '../LanguageContext';
 import { cn } from '../lib/utils';
 
 export default function Courses() {
-  const { t, language } = useLanguage();
+  const { t, language, formatCurrency, formatNumber } = useLanguage();
   const [courses, setCourses] = useState<Course[]>([]);
   const [filteredCourses, setFilteredCourses] = useState<Course[]>([]);
   const [loading, setLoading] = useState(true);
@@ -57,6 +57,21 @@ export default function Courses() {
     setFilteredCourses(result);
   }, [courses, searchQuery, categoryFilter, priceFilter]);
 
+  // Helper to parse price string
+  const parseAndFormatPrice = (price: string) => {
+    if (!price) return price;
+    if (price.toLowerCase().includes('free')) return language === 'en' ? 'Free' : language === 'ru' ? 'Бесплатно' : 'Bepul';
+    if (price.includes('UZS')) {
+      const num = parseInt(price.replace(/[^0-9]/g, ''));
+      return isNaN(num) ? price : formatCurrency(num);
+    }
+    if (price.includes('$')) {
+      const num = parseInt(price.replace(/[^0-9]/g, ''));
+      return isNaN(num) ? price : formatCurrency(num);
+    }
+    return price;
+  };
+
   return (
     <div className="bg-purple-50/30 dark:bg-gray-950 min-h-screen pb-20 transition-colors">
       <div className="bg-white dark:bg-gray-900 border-b border-gray-100 dark:border-gray-800 pt-16 pb-12 transition-colors">
@@ -82,10 +97,10 @@ export default function Courses() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-12 flex flex-col lg:flex-row gap-8">
         {/* Filters Sidebar */}
         <aside className="lg:w-64 space-y-6">
-          <div className="bg-white dark:bg-gray-800 p-6 rounded-3xl border border-gray-100 dark:border-gray-700 shadow-sm">
+          <div className="bg-white dark:bg-gray-800 p-6 rounded-3xl border border-gray-100 dark:border-gray-700 shadow-sm transition-colors">
             <div className="flex items-center justify-between mb-6">
               <h3 className="font-bold text-gray-900 dark:text-white flex items-center">
-                <Filter className="w-4 h-4 mr-2" /> {t.jobs.filters}
+                <Filter className="w-4 h-4 mr-2" /> {t.common.filters}
               </h3>
               <button 
                 onClick={() => {
@@ -95,13 +110,13 @@ export default function Courses() {
                 }}
                 className="text-xs text-purple-600 dark:text-purple-400 font-bold hover:underline"
               >
-                {t.jobs.reset}
+                {t.common.clearAll}
               </button>
             </div>
 
             <div className="space-y-6">
               <div>
-                <label className="text-xs font-black text-gray-400 uppercase tracking-widest mb-3 block">Price</label>
+                <label className="text-xs font-black text-gray-400 dark:text-gray-500 uppercase tracking-widest mb-3 block">Price</label>
                 <div className="space-y-2">
                   {['all', 'free', 'paid'].map((p) => (
                     <button
@@ -114,7 +129,7 @@ export default function Courses() {
                           : "bg-gray-50 dark:bg-gray-700 text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-600"
                       )}
                     >
-                      {p.charAt(0).toUpperCase() + p.slice(1)}
+                      {p === 'all' ? t.common.all : p === 'free' ? (language === 'en' ? 'Free' : language === 'ru' ? 'Бесплатно' : 'Bepul') : (language === 'en' ? 'Paid' : language === 'ru' ? 'Платно' : 'Pullik')}
                     </button>
                   ))}
                 </div>
@@ -148,7 +163,7 @@ export default function Courses() {
                     <div className="p-8 flex-1 flex flex-col">
                       <div className="flex justify-between items-start mb-4">
                         <h3 className="text-2xl font-black text-gray-900 dark:text-white leading-tight group-hover:text-purple-600 dark:group-hover:text-purple-400 transition-colors">{course.name}</h3>
-                        <span className="text-purple-600 dark:text-purple-400 font-black text-xl">{course.price}</span>
+                        <span className="text-purple-600 dark:text-purple-400 font-black text-xl">{parseAndFormatPrice(course.price)}</span>
                       </div>
                       
                       <div className="space-y-4 mb-8">
@@ -162,7 +177,7 @@ export default function Courses() {
                         </div>
                         <div className="flex items-center text-sm text-gray-600 dark:text-gray-400">
                           <Star className="w-5 h-5 mr-3 text-yellow-500 fill-yellow-500" />
-                          <span>4.8/5 Rating (200+ reviews)</span>
+                          <span>4.8/5 Rating ({formatNumber(200)}+ reviews)</span>
                         </div>
                       </div>
 
@@ -174,8 +189,8 @@ export default function Courses() {
                 ))}
               </AnimatePresence>
             ) : (
-              <div className="col-span-full bg-white dark:bg-gray-800 p-16 rounded-[2.5rem] border border-dashed border-gray-200 dark:border-gray-700 text-center">
-                <Search className="w-12 h-12 text-gray-300 mx-auto mb-4" />
+              <div className="col-span-full bg-white dark:bg-gray-800 p-16 rounded-[2.5rem] border border-dashed border-gray-200 dark:border-gray-700 text-center transition-colors">
+                <Search className="w-12 h-12 text-gray-300 dark:text-gray-600 mx-auto mb-4" />
                 <h3 className="text-xl font-bold text-gray-900 dark:text-white">{t.common.noResults}</h3>
               </div>
             )}
